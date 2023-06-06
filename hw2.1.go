@@ -4,6 +4,7 @@ import "fmt"
 
 type Zookeeper struct {
 	Name string
+	Cage Cage
 }
 
 type Animal struct {
@@ -16,10 +17,15 @@ type Cage struct {
 	Animals []Animal
 }
 
+func (z *Zookeeper) CatchAnimal(animal Animal) {
+	z.Cage.Animals = append(z.Cage.Animals, animal)
+}
+
 func main() {
 
 	zookeeper := Zookeeper{
 		Name: "Alex",
+		Cage: Cage{},
 	}
 
 	animals := []Animal{
@@ -39,12 +45,12 @@ func main() {
 	for i, animal := range animals {
 		if animal.Escaped {
 			animals[i].Escaped = false
-			cage.Animals = append(cage.Animals, animal)
-			fmt.Println(animal.Species + " say " + "'" + animal.Noise + "'")
+			zookeeper.CatchAnimal(animal)
+			fmt.Printf(`%s says "%s"%s`, animal.Species, animal.Noise, "\n")
 		}
 	}
 
-	fmt.Println("----------------------------")
+	fmt.Println("\n", "----------------------------")
 
 	fmt.Println("Animals after catching")
 
@@ -53,4 +59,6 @@ func main() {
 	}
 
 	fmt.Println("Zookeper has name ", zookeeper.Name)
+
+	fmt.Printf("There are %d animals in cage", len(cage.Animals))
 }
